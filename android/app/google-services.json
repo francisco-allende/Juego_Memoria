@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "533090559504",
+    "project_id": "tp-gameroom-allende",
+    "storage_bucket": "tp-gameroom-allende.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533090559504:android:ca33cdb69aaa50afa68c95",
+        "android_client_info": {
+          "package_name": "com.juego_memoria"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyM1IOzSIznL8NiuFGuUWeKeRyCMNiUZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
