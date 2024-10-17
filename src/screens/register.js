@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ImageBackground,
   KeyboardAvoidingView,
   Platform,
   Animated,
@@ -63,17 +64,32 @@ const RegisterScreen = ({navigation}) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}>
-      <View style={[styles.innerContainer]}>
-        <Image source={require('../assets/img/bebe.png')} style={styles.logo} />
-        <View style={styles.contentContainer}>
-          <Animated.View style={{transform: [{translateX: wobble}]}}>
+    <ImageBackground
+      source={require('../assets/img/register-bg.png')}
+      style={styles.backgroundImage}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}>
+        <View style={styles.overlay}>
+          <Text style={styles.title}>Únete al Desafío</Text>
+          <Animated.View
+            style={[
+              styles.card,
+              {
+                transform: [
+                  {
+                    rotate: wobble.interpolate({
+                      inputRange: [-1, 1],
+                      outputRange: ['-0.05rad', '0.05rad'],
+                    }),
+                  },
+                ],
+              },
+            ]}>
             <TextInput
               style={styles.input}
               placeholder="Correo electrónico"
-              placeholderTextColor="#8E8E8E"
+              placeholderTextColor="#555"
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
@@ -81,120 +97,97 @@ const RegisterScreen = ({navigation}) => {
             />
             <TextInput
               style={styles.input}
-              placeholder="Contraseña secreta"
-              placeholderTextColor="#8E8E8E"
+              placeholder="Contraseña"
+              placeholderTextColor="#555"
               value={password}
               onChangeText={setPassword}
               secureTextEntry
             />
             <TextInput
               style={styles.input}
-              placeholder="Confirma tu contraseña secreta"
-              placeholderTextColor="#8E8E8E"
+              placeholder="Confirmar Contraseña"
+              placeholderTextColor="#555"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
               secureTextEntry
             />
-          </Animated.View>
-          <View>
             <TouchableOpacity
               style={[styles.button, isLoading && styles.buttonDisabled]}
               onPress={handleRegister}
               disabled={isLoading}>
               <Text style={styles.buttonText}>
-                {isLoading
-                  ? '¡Preparando tu aventura...!'
-                  : '¡Crear mi cuenta mágica!'}
+                {isLoading ? 'Creando cuenta...' : 'Registrarse'}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, styles.loginButton]}
-              onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.buttonText}>¡Ya tengo una cuenta!</Text>
-            </TouchableOpacity>
-          </View>
+          </Animated.View>
+          <TouchableOpacity
+            style={[styles.button, styles.loginButton]}
+            onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.buttonText}>Ya tengo una cuenta</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
   container: {
     flex: 1,
-    backgroundColor: AppColors.amarillo,
   },
-  innerContainer: {
+  overlay: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
-  landscapeInnerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  logo: {
-    width: 150,
-    height: 150,
-    marginBottom: 20,
-  },
   title: {
-    fontSize: 28,
+    fontSize: 36,
     fontWeight: 'bold',
-    color: AppColors.rosa,
+    color: AppColors.blanco,
     marginBottom: 30,
-    textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10,
   },
-  landscapeTitle: {
-    position: 'absolute',
-    top: 20,
-    left: 0,
-    right: 0,
-    textAlign: 'center',
-  },
-  contentContainer: {
+  card: {
+    backgroundColor: 'rgba(255,255,255,0.8)',
+    borderRadius: 10,
+    padding: 20,
     width: '100%',
-  },
-  landscapeContentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    flex: 1,
-    marginTop: 30,
+    maxWidth: 400,
   },
   input: {
-    width: '100%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: AppColors.blanco,
     borderRadius: 25,
     padding: 15,
     marginBottom: 15,
     fontSize: 16,
-    borderWidth: 3,
-    borderColor: AppColors.naranja,
-    color: 'black',
-  },
-  landscapeButtonContainer: {
-    marginLeft: 20,
+    borderWidth: 2,
+    borderColor: AppColors.memoryPurple,
+    color: AppColors.dark,
   },
   button: {
-    backgroundColor: AppColors.lima,
+    backgroundColor: AppColors.memoryPurple,
     borderRadius: 25,
     padding: 15,
-    width: '100%',
     alignItems: 'center',
     marginTop: 10,
   },
   buttonDisabled: {
-    backgroundColor: '#D3D3D3',
+    backgroundColor: AppColors.memoryGray,
   },
   loginButton: {
-    backgroundColor: AppColors.rosa,
-    marginTop: 10,
+    backgroundColor: AppColors.memoryBlue,
+    marginTop: 20,
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: AppColors.blanco,
     fontSize: 18,
     fontWeight: 'bold',
   },

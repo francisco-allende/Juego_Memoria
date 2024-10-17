@@ -1,126 +1,187 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  Image,
-  Dimensions,
   Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Dimensions,
 } from 'react-native';
 import {AppColors} from '../assets/styles/default-styles';
 import GoBackScreen from '../components/go-back';
+import Sound from 'react-native-sound';
 
 const {width, height} = Dimensions.get('window');
 
-const optionImages = {
-  // Numbers
-  1: require('../assets/img/game/numbers/uno.png'),
-  2: require('../assets/img/game/numbers/dos.png'),
-  3: require('../assets/img/game/numbers/tres.png'),
-  4: require('../assets/img/game/numbers/cuatro.png'),
-  5: require('../assets/img/game/numbers/cinco.png'),
-  6: require('../assets/img/game/numbers/seis.png'),
-  // Colors
-  Azul: require('../assets/img/game/colors/azul.png'),
-  Verde: require('../assets/img/game/colors/verde.png'),
-  Rojo: require('../assets/img/game/colors/rojo.png'),
-  Amarillo: require('../assets/img/game/colors/amarillo.png'),
-  Morado: require('../assets/img/game/colors/morado.png'),
-  Naranja: require('../assets/img/game/colors/naranja.png'),
-  // Animals
-  Vaca: require('../assets/img/game/animals/vaca.png'),
-  Perro: require('../assets/img/game/animals/perro.png'),
-  Conejo: require('../assets/img/game/animals/conejo.png'),
-  Pajaro: require('../assets/img/game/animals/pajaro.png'),
-  Elefante: require('../assets/img/game/animals/elefante.png'),
-  Leon: require('../assets/img/game/animals/leon.png'),
-};
+const HomeScreen = ({navigation}) => {
+  const [selectedDifficulty, setSelectedDifficulty] = useState('medium');
+  const currentSound = useRef(null);
 
-const dimensions = Dimensions.get('screen');
+  const difficultyOptions = [
+    {
+      level: 'easy',
+      text: 'Fácil',
+      image: require('../assets/img/animales/cocodrilo.png'),
+    },
+    {
+      level: 'medium',
+      text: 'Medio',
+      image: require('../assets/img/herramientas/martillo.png'),
+    },
+    {
+      level: 'hard',
+      text: 'Difícil',
+      image: require('../assets/img/frutas/frutilla.png'),
+    },
+  ];
 
-const HomeScreen = () => {
-  const [selectedTheme, setSelectedTheme] = useState('animals'); // Animales por defecto
+  Sound.setCategory('Playback');
 
-  const items = {
-    animals: ['Vaca', 'Perro', 'Conejo', 'Pajaro', 'Elefante', 'Leon'],
-    colors: ['Azul', 'Verde', 'Rojo', 'Amarillo', 'Morado', 'Naranja'],
-    numbers: [1, 2, 3, 4, 5, 6],
+  const playSound = soundType => {
+    if (currentSound.current) {
+      currentSound.current.stop(() => {
+        currentSound.current.release();
+      });
+    }
+
+    const soundFile =
+      soundType === 'select'
+        ? require('../assets/sounds/select.mp3')
+        : require('../assets/sounds/play.mp3');
+
+    const sound = new Sound(soundFile, error => {
+      if (error) {
+        console.log('Error loading sound:', error);
+        return;
+      }
+      currentSound.current = sound;
+      sound.play(success => {
+        if (success) {
+          console.log('Sound played successfully');
+        } else {
+          console.log('Sound playback failed');
+        }
+      });
+    });
+  };
+
+  const handleDifficultySelect = difficulty => {
+    setSelectedDifficulty(difficulty);
+    playSound('select');
+  };
+
+  const handleStartGame = () => {
+    playSound('play');
+    navigation.navigate('Game', {difficulty: selectedDifficulty});
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <>
       <GoBackScreen />
       <View style={styles.container}>
-        <View style={styles.gameContainer}>
-          {items[selectedTheme].map((item, index) => (
+        <Text style={styles.title}>Elegí la Dificultad</Text>
+        <View style={styles.difficultyContainer}>
+          {difficultyOptions.map(option => (
             <TouchableOpacity
-              key={index}
-              style={[styles.itemButton, {width: itemSize, height: itemSize}]}>
-              <Image
-                source={optionImages[item]}
-                style={styles.itemImage}
-                resizeMode="contain"
-              />
+              key={option.level}
+              style={[
+                styles.difficultyOption,
+                selectedDifficulty === option.level && styles.selectedOption,
+              ]}
+              onPress={() => handleDifficultySelect(option.level)}>
+              <Image source={option.image} style={styles.difficultyImage} />
+              <Text style={styles.difficultyText}>{option.text}</Text>
             </TouchableOpacity>
           ))}
         </View>
+        <TouchableOpacity style={styles.playButton} onPress={handleStartGame}>
+          <Image
+            source={require('../assets/img/rocket.png')}
+            style={styles.rocketImage}
+          />
+          <Text style={styles.playButtonText}>Jugar</Text>
+        </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: AppColors.amarillo,
-  },
   container: {
     flex: 1,
-    paddingHorizontal: 10,
-    paddingBottom: 10,
-  },
-  topRow: {
-    flexDirection: 'row',
+    backgroundColor: AppColors.verde,
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 0,
   },
-  languageContainer: {
-    flex: 2,
-    alignItems: 'center',
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: AppColors.amarillo,
+    marginBottom: 30,
+    textShadowColor: 'black',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10,
   },
-  themeContainer: {
-    flex: 1,
-    alignItems: 'center',
+  difficultyContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginBottom: 50,
   },
-  gameContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    alignContent: 'flex-start',
+  difficultyOption: {
+    alignItems: 'center',
     padding: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  selectedOption: {
+    borderColor: AppColors.amarillo,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    marginHorizontal: '5%',
+  },
+  difficultyImage: {
+    width: width * 0.25,
+    height: width * 0.25,
+    resizeMode: 'contain',
+  },
+  difficultyText: {
+    color: AppColors.amarillo,
+    fontSize: 18,
     marginTop: 10,
+    textShadowColor: 'black',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 5,
   },
-  itemButton: {
-    width: dimensions.width * 0.4,
-    height: dimensions.width * 0.4,
-    margin: width * 0.01,
-    backgroundColor: AppColors.celeste,
-    borderRadius: 15,
+  playButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: AppColors.amarillo,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    marginTop: 0,
+    // Sombras para iOS
+    shadowColor: 'black',
+    shadowOffset: {width: -1, height: 1},
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    // Sombra para Android
     elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    alignItems: 'center',
   },
-  itemImage: {
-    width: '90%',
-    height: '90%',
+  rocketImage: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+  },
+  playButtonText: {
+    color: AppColors.verde,
+    fontSize: 24,
+    fontWeight: 'bold',
+    textShadowColor: 'black',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 3,
   },
 });
 

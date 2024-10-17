@@ -1,6 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
 const AppColors = {
+  // Colores existentes
   primary: '#007bff',
   secondary: '#6c757d',
   success: '#28a745',
@@ -21,6 +22,15 @@ const AppColors = {
   amarillo: '#FFD700',
   celeste: '#87CEEB',
   azul: '#3366ff',
+
+  // Nuevos colores para el juego de memoria
+  memoryBlue: '#3498db',
+  memoryGreen: '#2ecc71',
+  memoryRed: '#e74c3c',
+  memoryPurple: '#9b59b6',
+  memoryGray: '#bdc3c7',
+  memoryDark: '#2c3e50',
+  memoryLight: '#ecf0f1',
 };
 
 const AppBg = StyleSheet.create({

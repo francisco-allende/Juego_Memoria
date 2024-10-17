@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ImageBackground,
   KeyboardAvoidingView,
   Platform,
   Animated,
@@ -76,17 +77,32 @@ const LoginScreen = ({navigation}) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}>
-      <View style={[styles.innerContainer]}>
-        <Image source={require('../assets/img/bebe.png')} style={styles.logo} />
-        <View style={styles.contentContainer}>
-          <Animated.View style={{transform: [{translateX: wobble}]}}>
+    <ImageBackground
+      source={require('../assets/img/login-bg.png')}
+      style={styles.backgroundImage}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}>
+        <View style={styles.overlay}>
+          <Text style={styles.title}>Juego de Memoria</Text>
+          <Animated.View
+            style={[
+              styles.card,
+              {
+                transform: [
+                  {
+                    rotate: wobble.interpolate({
+                      inputRange: [-1, 1],
+                      outputRange: ['-0.05rad', '0.05rad'],
+                    }),
+                  },
+                ],
+              },
+            ]}>
             <TextInput
               style={styles.input}
               placeholder="Correo electrónico"
-              placeholderTextColor="#8E8E8E"
+              placeholderTextColor="#555"
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
@@ -95,125 +111,98 @@ const LoginScreen = ({navigation}) => {
             <TextInput
               style={styles.input}
               placeholder="Contraseña"
-              placeholderTextColor="#8E8E8E"
+              placeholderTextColor="#555"
               value={password}
               onChangeText={setPassword}
               secureTextEntry
             />
-          </Animated.View>
-          <View>
             <TouchableOpacity
               style={[styles.button, isLoading && styles.buttonDisabled]}
               onPress={handleLogin}
               disabled={isLoading}>
               <Text style={styles.buttonText}>
-                {isLoading ? '¡Cargando...!' : '¡Vamos a aprender!'}
+                {isLoading ? 'Cargando...' : 'Iniciar Sesión'}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.buttonEasyLogin,
-                isLoading && styles.buttonDisabled,
-              ]}
-              onPress={easyLogin}
-              disabled={isLoading}>
-              <Text style={styles.buttonText}>Inicio rápido</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, styles.registerButton]}
-              onPress={() => navigation.navigate('Register')}>
-              <Text style={styles.buttonText}>¡Quiero una cuenta nueva!</Text>
-            </TouchableOpacity>
-          </View>
+          </Animated.View>
+          <TouchableOpacity
+            style={[styles.button, styles.easyLoginButton]}
+            onPress={easyLogin}
+            disabled={isLoading}>
+            <Text style={styles.buttonText}>Inicio Rápido</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.registerButton]}
+            onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.buttonText}>Registrarse</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
   container: {
     flex: 1,
-    backgroundColor: AppColors.celeste,
   },
-  innerContainer: {
+  overlay: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
-  landscapeInnerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  logo: {
-    width: 150,
-    height: 150,
-    marginBottom: 20,
-  },
   title: {
-    fontSize: 28,
+    fontSize: 36,
     fontWeight: 'bold',
-    color: AppColors.tomate,
+    color: AppColors.blanco,
     marginBottom: 30,
-    textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10,
   },
-  landscapeTitle: {
-    position: 'absolute',
-    top: 20,
-    left: 0,
-    right: 0,
-    textAlign: 'center',
-  },
-  contentContainer: {
+  card: {
+    backgroundColor: 'rgba(255,255,255,0.8)',
+    borderRadius: 10,
+    padding: 20,
     width: '100%',
-  },
-  landscapeContentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    flex: 1,
+    maxWidth: 400,
   },
   input: {
-    width: '100%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: AppColors.blanco,
     borderRadius: 25,
     padding: 15,
     marginBottom: 15,
     fontSize: 16,
-    borderWidth: 3,
-    borderColor: AppColors.verde,
-    color: 'black',
-  },
-  landscapeButtonContainer: {
-    marginLeft: 20,
+    borderWidth: 2,
+    borderColor: AppColors.memoryBlue,
+    color: AppColors.dark,
   },
   button: {
-    backgroundColor: AppColors.rosa,
+    backgroundColor: AppColors.memoryBlue,
     borderRadius: 25,
     padding: 15,
-    width: '100%',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  buttonEasyLogin: {
-    backgroundColor: AppColors.tomate,
-    borderRadius: 25,
-    padding: 15,
-    width: '100%',
     alignItems: 'center',
     marginTop: 10,
   },
   buttonDisabled: {
-    backgroundColor: '#D3D3D3',
+    backgroundColor: AppColors.memoryGray,
+  },
+  easyLoginButton: {
+    backgroundColor: AppColors.memoryGreen,
+    marginTop: 20,
   },
   registerButton: {
-    backgroundColor: AppColors.verde,
+    backgroundColor: AppColors.memoryRed,
     marginTop: 10,
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: AppColors.blanco,
     fontSize: 18,
     fontWeight: 'bold',
   },

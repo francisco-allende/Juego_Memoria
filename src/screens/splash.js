@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
 import {AppColors} from '../assets/styles/default-styles';
+
+const {width, height} = Dimensions.get('window');
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
@@ -13,14 +15,14 @@ const SplashScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topSection}>
+      <View style={styles.contentContainer}>
         <Image
           source={require('../assets/img/icono.png')}
           style={styles.icon}
         />
-        <Text style={styles.title}>Tabla Didáctica</Text>
+        <Text style={styles.title}>Juego de Memoria</Text>
       </View>
-      <View style={styles.bottomSection}>
+      <View style={styles.infoContainer}>
         <Text style={styles.info}>Francisco Allende</Text>
         <Text style={styles.info}>División A141-2</Text>
       </View>
@@ -33,33 +35,39 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 50,
-    backgroundColor: AppColors.celeste,
+    backgroundColor: AppColors.memoryGreen,
+    padding: 20,
   },
-  topSection: {
+  contentContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   icon: {
-    width: 200,
-    height: 200,
-    marginBottom: 30,
+    width: width * 0.6,
+    height: width * 0.6,
+    marginBottom: height * 0.05,
   },
   title: {
-    fontSize: 36,
+    fontSize: width * 0.1, // Aumentado el tamaño de la fuente
     fontWeight: 'bold',
     textAlign: 'center',
-    marginHorizontal: 20,
-    color: AppColors.azul,
+    color: AppColors.amarillo,
+    textShadowColor: 'black',
+    textShadowOffset: {width: -2, height: 2},
+    textShadowRadius: 10,
   },
-  bottomSection: {
+  infoContainer: {
     alignItems: 'center',
+    marginBottom: height * 0.05,
   },
   info: {
-    fontSize: 18,
-    color: AppColors.azul,
-    marginBottom: 15,
+    fontSize: width * 0.05, // Aumentado el tamaño de la fuente
+    color: AppColors.amarillo,
+    marginBottom: 10,
+    textShadowColor: 'black',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 5,
   },
 });
 

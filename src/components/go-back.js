@@ -15,12 +15,12 @@ export default function GoBackScreen({text}) {
   return (
     <View style={styles.header}>
       <TouchableOpacity
-        style={{color: AppColors.rosa}}
+        style={{color: AppColors.verde}}
         onPress={() => navigation.goBack()}>
         <FontAwesomeIcon
           icon={faChevronLeft}
           size={21}
-          style={AppButton.goBackKids}
+          style={AppButton.verde}
         />
       </TouchableOpacity>
     </View>
@@ -29,7 +29,7 @@ export default function GoBackScreen({text}) {
 
 const styles = StyleSheet.create({
   header: {
-    color: AppColors.white,
+    color: AppColors.verde,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     padding: 12,
