@@ -6,6 +6,8 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  Animated,
+  ActivityIndicator,
 } from 'react-native';
 import {AppColors} from '../assets/styles/default-styles';
 import {getAnimales, getHerramientas, getFrutas} from '../utils/imageUtils';
@@ -22,10 +24,22 @@ const GameScreen = ({route, navigation}) => {
   const [gameOver, setGameOver] = useState(false);
   const currentSound = useRef(null);
   const backgroundMusic = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    initializeGame();
-    playBackgroundMusic();
+    const initGame = async () => {
+      setIsLoading(true);
+      initializeGame();
+      playBackgroundMusic();
+
+      // Esperar 4 segundos para el loader
+      await new Promise(resolve => setTimeout(resolve, 4000));
+
+      setIsLoading(false);
+    };
+
+    initGame();
+
     return () => {
       stopBackgroundMusic();
       if (currentSound.current) {
@@ -35,13 +49,13 @@ const GameScreen = ({route, navigation}) => {
   }, []);
 
   useEffect(() => {
-    if (!gameOver) {
+    if (!gameOver && !isLoading) {
       const interval = setInterval(() => {
         setTimer(prevTimer => prevTimer + 1);
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [gameOver]);
+  }, [gameOver, isLoading]);
 
   Sound.setCategory('Playback');
 
@@ -59,6 +73,9 @@ const GameScreen = ({route, navigation}) => {
         break;
       case 'match':
         soundFile = require('../assets/sounds/match.mp3');
+        break;
+      case 'miss':
+        soundFile = require('../assets/sounds/miss.mp3');
         break;
       case 'win':
         soundFile = require('../assets/sounds/win.mp3');
@@ -136,6 +153,16 @@ const GameScreen = ({route, navigation}) => {
       default:
         images = getAnimales();
         pairCount = 3;
+
+        setCards(gameCards);
+        setMatchedPairs([]);
+        setFlippedIndices([]);
+        setTimer(0);
+        setGameOver(false);
+
+        // Reiniciar la música de fondo
+        stopBackgroundMusic();
+        playBackgroundMusic();
     }
 
     const imageKeys = Object.keys(images);
@@ -179,6 +206,9 @@ const GameScreen = ({route, navigation}) => {
               : card,
           ),
         );
+      } else {
+        // Reproducir sonido de fallo
+        playSound('miss');
       }
       setTimeout(() => setFlippedIndices([]), 1000);
     }
@@ -214,6 +244,14 @@ const GameScreen = ({route, navigation}) => {
     );
   };
 
+  if (isLoading) {
+    return (
+      <View style={[styles.container, styles.loaderContainer]}>
+        <ActivityIndicator size="large" color={AppColors.amarillo} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.timer}>Tiempo: {timer} segundos</Text>
@@ -226,7 +264,12 @@ const GameScreen = ({route, navigation}) => {
           <Text style={styles.gameOverText}>Tiempo: {timer} segundos</Text>
           <TouchableOpacity
             style={styles.playAgainButton}
-            onPress={initializeGame}>
+            onPress={() => {
+              setIsLoading(true);
+              initializeGame();
+              playBackgroundMusic();
+              setTimeout(() => setIsLoading(false), 4000);
+            }}>
             <Text style={styles.playAgainButtonText}>Jugar de nuevo</Text>
           </TouchableOpacity>
         </View>
