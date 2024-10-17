@@ -47,7 +47,7 @@ const HomeScreen = ({navigation}) => {
     const soundFile =
       soundType === 'select'
         ? require('../assets/sounds/select.mp3')
-        : require('../assets/sounds/play.mp3');
+        : require('../assets/sounds/match.mp3');
 
     const sound = new Sound(soundFile, error => {
       if (error) {
@@ -71,7 +71,7 @@ const HomeScreen = ({navigation}) => {
   };
 
   const handleStartGame = () => {
-    playSound('play');
+    playSound('match');
     navigation.navigate('Game', {difficulty: selectedDifficulty});
   };
 
