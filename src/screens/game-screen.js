@@ -35,10 +35,6 @@ const GameScreen = ({route, navigation}) => {
       setIsLoading(true);
       initializeGame();
       playBackgroundMusic();
-
-      // Esperar 4 segundos para el loader
-      await new Promise(resolve => setTimeout(resolve, 4000));
-
       setIsLoading(false);
     };
 
