@@ -75,6 +75,11 @@ const HomeScreen = ({navigation}) => {
     navigation.navigate('Game', {difficulty: selectedDifficulty});
   };
 
+  const handleViewResults = () => {
+    playSound('select');
+    navigation.navigate('Results');
+  };
+
   return (
     <>
       <GoBackScreen />
@@ -101,6 +106,15 @@ const HomeScreen = ({navigation}) => {
           />
           <Text style={styles.playButtonText}>Jugar</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.resultsButton}
+          onPress={handleViewResults}>
+          <Image
+            source={require('../assets/img/mejor-result.png')}
+            style={styles.rocketImage}
+          />
+          <Text style={styles.resultsButtonText}>Ver Mejores Resultados</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -126,7 +140,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-around',
     width: '100%',
-    marginBottom: 50,
+    marginBottom: 25,
   },
   difficultyOption: {
     alignItems: 'center',
@@ -182,6 +196,22 @@ const styles = StyleSheet.create({
     textShadowColor: 'black',
     textShadowOffset: {width: -1, height: 1},
     textShadowRadius: 3,
+  },
+  //result
+  resultsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: AppColors.memoryBlue,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginTop: 20,
+  },
+  resultsButtonText: {
+    color: AppColors.blanco,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.05,
   },
   info: {
-    fontSize: width * 0.05, // Aumentado el tamaño de la fuente
+    fontSize: width * 0.07, // Aumentado el tamaño de la fuente
     color: AppColors.amarillo,
     marginBottom: 10,
     textShadowColor: 'black',

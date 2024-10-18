@@ -24,7 +24,7 @@ const AppColors = {
   azul: '#3366ff',
 
   // Nuevos colores para el juego de memoria
-  memoryBlue: '#3498db',
+  memoryBlue: '#1034A6',
   memoryGreen: '#2ecc71',
   memoryRed: '#e74c3c',
   memoryPurple: '#9b59b6',

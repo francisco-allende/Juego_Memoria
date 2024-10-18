@@ -5,6 +5,7 @@ import LoginScreen from './screens/login';
 import HomeScreen from './screens/home';
 import RegisterScreen from './screens/register';
 import GameScreen from './screens/game-screen';
+import ResultsScreen from './screens/result-screen';
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,12 @@ const MainNavigation = () => {
       <Stack.Screen
         name="Game"
         component={GameScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="Results"
+        component={ResultsScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

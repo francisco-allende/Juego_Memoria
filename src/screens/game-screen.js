@@ -14,6 +14,8 @@ import {getAnimales, getHerramientas, getFrutas} from '../utils/imageUtils';
 import Sound from 'react-native-sound';
 import GoBackScreen from '../components/go-back';
 import styles from '../assets/styles/game-styles';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const {width, height} = Dimensions.get('window');
 
@@ -221,8 +223,28 @@ const GameScreen = ({route, navigation}) => {
       setGameOver(true);
       stopBackgroundMusic();
       playSound('win');
+      saveGameResult();
     }
   }, [matchedPairs, cards]);
+
+  const saveGameResult = async () => {
+    try {
+      const user = auth().currentUser;
+      if (user) {
+        const userName = user.email.split('@')[0]; // Obtener el nombre de usuario del email
+        await firestore().collection('gameResults').add({
+          userId: user.uid,
+          userName: userName,
+          time: timer,
+          difficulty: difficulty,
+          date: firestore.FieldValue.serverTimestamp(),
+        });
+        console.log('Game result saved successfully');
+      }
+    } catch (error) {
+      console.error('Error saving game result:', error);
+    }
+  };
 
   const getGridStyle = () => {
     switch (difficulty) {
