@@ -12,6 +12,8 @@ import {
 import {AppColors} from '../assets/styles/default-styles';
 import {getAnimales, getHerramientas, getFrutas} from '../utils/imageUtils';
 import Sound from 'react-native-sound';
+import GoBackScreen from '../components/go-back';
+import styles from '../assets/styles/game-styles';
 
 const {width, height} = Dimensions.get('window');
 
@@ -222,6 +224,32 @@ const GameScreen = ({route, navigation}) => {
     }
   }, [matchedPairs, cards]);
 
+  const getGridStyle = () => {
+    switch (difficulty) {
+      case 'easy':
+        return styles.gridEasy;
+      case 'medium':
+        return styles.gridMedium;
+      case 'hard':
+        return styles.gridHard;
+      default:
+        return styles.gridEasy;
+    }
+  };
+
+  const getCardStyle = () => {
+    switch (difficulty) {
+      case 'easy':
+        return styles.cardEasy;
+      case 'medium':
+        return styles.cardMedium;
+      case 'hard':
+        return styles.cardHard;
+      default:
+        return styles.cardEasy;
+    }
+  };
+
   const renderCard = (card, index) => {
     const images =
       difficulty === 'easy'
@@ -232,7 +260,11 @@ const GameScreen = ({route, navigation}) => {
     return (
       <TouchableOpacity
         key={card.id}
-        style={[styles.card, card.matched && styles.matchedCard]}
+        style={[
+          styles.card,
+          getCardStyle(),
+          card.matched && styles.matchedCard,
+        ]}
         onPress={() => handleCardPress(index)}
         disabled={card.matched}>
         {card.matched || flippedIndices.includes(index) ? (
@@ -246,105 +278,40 @@ const GameScreen = ({route, navigation}) => {
 
   if (isLoading) {
     return (
-      <View style={[styles.container, styles.loaderContainer]}>
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={AppColors.amarillo} />
+        <Text style={styles.loadingText}>Cargando</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.timer}>Tiempo: {timer} segundos</Text>
-      <View style={styles.grid}>
-        {cards.map((card, index) => renderCard(card, index))}
-      </View>
-      {gameOver && (
-        <View style={styles.gameOverContainer}>
-          <Text style={styles.gameOverText}>¡Juego terminado!</Text>
-          <Text style={styles.gameOverText}>Tiempo: {timer} segundos</Text>
-          <TouchableOpacity
-            style={styles.playAgainButton}
-            onPress={() => {
-              setIsLoading(true);
-              initializeGame();
-              playBackgroundMusic();
-              setTimeout(() => setIsLoading(false), 4000);
-            }}>
-            <Text style={styles.playAgainButtonText}>Jugar de nuevo</Text>
-          </TouchableOpacity>
+    <>
+      <GoBackScreen text={'Menú'} />
+      <View style={styles.container}>
+        <Text style={styles.timer}>Tiempo: {timer} segundos</Text>
+        <View style={[styles.grid, getGridStyle()]}>
+          {cards.map((card, index) => renderCard(card, index))}
         </View>
-      )}
-    </View>
+        {gameOver && (
+          <View style={styles.gameOverContainer}>
+            <Text style={styles.gameOverText}>¡Juego terminado!</Text>
+            <Text style={styles.gameOverText}>Tiempo: {timer} segundos</Text>
+            <TouchableOpacity
+              style={styles.playAgainButton}
+              onPress={() => {
+                setIsLoading(true);
+                initializeGame();
+                playBackgroundMusic();
+                setTimeout(() => setIsLoading(false), 2000);
+              }}>
+              <Text style={styles.playAgainButtonText}>Jugar de nuevo</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: AppColors.verde,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  timer: {
-    fontSize: 18,
-    color: AppColors.amarillo,
-    marginBottom: 10,
-  },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    width: width,
-    height: height - 100, // Ajusta esto según sea necesario
-  },
-  card: {
-    width: width / 4 - 10,
-    height: width / 4 - 10,
-    margin: 5,
-    backgroundColor: AppColors.amarillo,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-  },
-  matchedCard: {
-    backgroundColor: AppColors.lima,
-  },
-  cardBack: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: AppColors.naranja,
-    borderRadius: 10,
-  },
-  cardImage: {
-    width: '80%',
-    height: '80%',
-    resizeMode: 'contain',
-  },
-  gameOverContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.8)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  gameOverText: {
-    fontSize: 24,
-    color: AppColors.amarillo,
-    marginBottom: 20,
-  },
-  playAgainButton: {
-    backgroundColor: AppColors.amarillo,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-  },
-  playAgainButtonText: {
-    fontSize: 18,
-    color: AppColors.verde,
-  },
-});
 
 export default GameScreen;

@@ -1,13 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
-import {useNavigation} from '@react-navigation/native';
-import {
-  AppButton,
-  AppColors,
-  AppFontSize,
-} from '../assets/styles/default-styles';
+import {AppColors} from '../assets/styles/default-styles';
 
 export default function GoBackScreen({text}) {
   const navigation = useNavigation();
@@ -15,13 +11,14 @@ export default function GoBackScreen({text}) {
   return (
     <View style={styles.header}>
       <TouchableOpacity
-        style={{color: AppColors.verde}}
+        style={styles.button}
         onPress={() => navigation.goBack()}>
         <FontAwesomeIcon
           icon={faChevronLeft}
-          size={21}
-          style={AppButton.verde}
+          size={24}
+          color={AppColors.verde}
         />
+        <Text style={styles.txt}>{text}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -29,10 +26,19 @@ export default function GoBackScreen({text}) {
 
 const styles = StyleSheet.create({
   header: {
-    color: AppColors.verde,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    alignItems: 'center',
     padding: 12,
     backgroundColor: AppColors.amarillo,
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  txt: {
+    color: AppColors.verde,
+    fontSize: 18,
+    marginLeft: 10,
   },
 });
