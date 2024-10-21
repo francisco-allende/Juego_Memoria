@@ -20,7 +20,7 @@ const ResultsScreen = () => {
         const snapshot = await firestore()
           .collection('gameResults')
           .orderBy('time', 'asc')
-          .limit(5)
+          .limit(15)
           .get();
 
         const formattedResults = snapshot.docs.map(doc => ({
@@ -40,13 +40,21 @@ const ResultsScreen = () => {
     fetchResults();
   }, []);
 
+  const translator = {
+    easy: 'Fácil',
+    medium: 'Medio',
+    hard: 'Difícil',
+  };
+
   const renderItem = ({item, index}) => (
     <View style={styles.resultItem}>
       <Text style={styles.rank}>{index + 1}</Text>
       <View style={styles.resultInfo}>
         <Text style={styles.userName}>{item.userName}</Text>
         <Text style={styles.time}>{item.time} segundos</Text>
-        <Text style={styles.difficulty}>{item.difficulty}</Text>
+        <Text style={styles.difficulty}>
+          {translator[item.difficulty] || 'Medio'}
+        </Text>
         <Text style={styles.date}>{item.date}</Text>
       </View>
     </View>
@@ -64,7 +72,7 @@ const ResultsScreen = () => {
     <>
       <GoBackScreen text={'Menú'} />
       <View style={styles.container}>
-        <Text style={styles.title}>Top 5 Mejores Tiempos</Text>
+        <Text style={styles.title}>Los 5 Mejores Tiempos</Text>
         <FlatList
           data={results}
           renderItem={renderItem}

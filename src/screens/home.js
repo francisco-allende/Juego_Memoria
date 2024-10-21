@@ -82,7 +82,7 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <>
-      <GoBackScreen />
+      <GoBackScreen text={'Menú'} />
       <View style={styles.container}>
         <Text style={styles.title}>Elegí la Dificultad</Text>
         <View style={styles.difficultyContainer}>
@@ -104,16 +104,7 @@ const HomeScreen = ({navigation}) => {
             source={require('../assets/img/rocket.png')}
             style={styles.rocketImage}
           />
-          <Text style={styles.playButtonText}>Jugar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.resultsButton}
-          onPress={handleViewResults}>
-          <Image
-            source={require('../assets/img/mejor-result.png')}
-            style={styles.rocketImage}
-          />
-          <Text style={styles.resultsButtonText}>Ver Mejores Resultados</Text>
+          <Text style={styles.playButtonText}>Comenzar</Text>
         </TouchableOpacity>
       </View>
     </>
@@ -175,7 +166,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 25,
-    marginTop: 0,
+    marginTop: 15,
     // Sombras para iOS
     shadowColor: 'black',
     shadowOffset: {width: -1, height: 1},

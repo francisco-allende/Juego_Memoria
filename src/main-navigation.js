@@ -6,6 +6,7 @@ import HomeScreen from './screens/home';
 import RegisterScreen from './screens/register';
 import GameScreen from './screens/game-screen';
 import ResultsScreen from './screens/result-screen';
+import NewHomeScreen from './screens/new-home';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,12 @@ const MainNavigation = () => {
       <Stack.Screen
         name="Register"
         component={RegisterScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="NewHome"
+        component={NewHomeScreen}
         options={{headerShown: false}}
       />
 

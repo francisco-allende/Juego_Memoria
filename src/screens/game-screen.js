@@ -305,7 +305,7 @@ const GameScreen = ({route, navigation}) => {
 
   return (
     <>
-      <GoBackScreen text={'Menú'} />
+      <GoBackScreen text={'Elegir dificultad'} />
       <View style={styles.container}>
         <Text style={styles.timer}>Tiempo: {timer} segundos</Text>
         <View style={[styles.grid, getGridStyle()]}>

@@ -5,7 +5,6 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Image,
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
@@ -16,6 +15,8 @@ import useAuthenticationApi from '../api/authentication';
 import showToast from '../functions/showToast';
 import auth from '@react-native-firebase/auth';
 import {AppColors} from '../assets/styles/default-styles';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faUser, faUserSecret, faFlask} from '@fortawesome/free-solid-svg-icons';
 
 const LoginScreen = ({navigation}) => {
   const {signIn} = useContext(AuthContext);
@@ -40,14 +41,11 @@ const LoginScreen = ({navigation}) => {
     await doLogin();
   };
 
-  const easyLogin = async () => {
+  const easyLogin = async userEmail => {
     try {
       setIsLoading(true);
-      await auth().signInWithEmailAndPassword(
-        'adminuno@yopmail.com',
-        '12345678',
-      );
-      navigation.navigate('Home');
+      await auth().signInWithEmailAndPassword(userEmail, '12345678');
+      navigation.navigate('NewHome');
     } catch (error) {
       console.error('Error en inicio rápido:', error);
       showToast('error', 'Error en inicio rápido. Intenta de nuevo.', 3000);
@@ -125,12 +123,39 @@ const LoginScreen = ({navigation}) => {
               </Text>
             </TouchableOpacity>
           </Animated.View>
-          <TouchableOpacity
-            style={[styles.button, styles.easyLoginButton]}
-            onPress={easyLogin}
-            disabled={isLoading}>
-            <Text style={styles.buttonText}>Inicio Rápido</Text>
-          </TouchableOpacity>
+
+          <View style={styles.quickAccessContainer}>
+            <TouchableOpacity
+              style={styles.quickAccessButton}
+              onPress={() => easyLogin('adminuno@yopmail.com')}>
+              <FontAwesomeIcon
+                icon={faUser}
+                size={35}
+                color={AppColors.verde}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.quickAccessButton}
+              onPress={() => easyLogin('anonimo@yopmail.com')}>
+              <FontAwesomeIcon
+                icon={faUserSecret}
+                size={35}
+                color={AppColors.verde}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.quickAccessButton}
+              onPress={() => easyLogin('tester@yopmail.com')}>
+              <FontAwesomeIcon
+                icon={faFlask}
+                size={35}
+                color={AppColors.verde}
+              />
+            </TouchableOpacity>
+          </View>
+
           <TouchableOpacity
             style={[styles.button, styles.registerButton]}
             onPress={() => navigation.navigate('Register')}>
@@ -193,18 +218,29 @@ const styles = StyleSheet.create({
   buttonDisabled: {
     backgroundColor: AppColors.memoryGray,
   },
-  easyLoginButton: {
-    backgroundColor: AppColors.memoryGreen,
-    marginTop: 20,
-  },
-  registerButton: {
-    backgroundColor: AppColors.memoryRed,
-    marginTop: 10,
-  },
   buttonText: {
     color: AppColors.blanco,
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  quickAccessContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: 20,
+  },
+  quickAccessButton: {
+    width: 100,
+    height: 100,
+    borderRadius: 30,
+    backgroundColor: AppColors.amarillo,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  registerButton: {
+    backgroundColor: AppColors.memoryRed,
+    marginTop: 20,
+    width: 330,
   },
 });
 

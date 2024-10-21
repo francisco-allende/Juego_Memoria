@@ -20,7 +20,7 @@ const useAuthenticationApi = (email, password, setIsLoading, navigation) => {
         return;
       }
 
-      navigation.navigate('Home');
+      navigation.navigate('NewHome');
     } catch (error) {
       console.error('Login failed: ', error.message);
       showToast('error', 'Credenciales inválidas', 5000);
