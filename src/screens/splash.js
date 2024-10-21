@@ -17,7 +17,7 @@ const SplashScreen = ({navigation}) => {
     <View style={styles.container}>
       <View style={styles.contentContainer}>
         <Image
-          source={require('../assets/img/icono.png')}
+          source={require('../assets/img/new-icon-transparent.png')}
           style={styles.icon}
         />
         <Text style={styles.title}>Juego de Memoria</Text>
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.05,
   },
   info: {
-    fontSize: width * 0.07, // Aumentado el tamaño de la fuente
+    fontSize: width * 0.08, // Aumentado el tamaño de la fuente
     color: AppColors.amarillo,
     marginBottom: 10,
     textShadowColor: 'black',
