@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
   txt: {
     color: AppColors.verde,
-    fontSize: 18,
+    fontSize: 22,
     marginLeft: 10,
   },
 });
