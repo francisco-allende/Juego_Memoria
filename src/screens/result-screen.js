@@ -83,7 +83,7 @@ const ResultsScreen = () => {
     <>
       <GoBackScreen text={'Menú'} />
       <View style={styles.container}>
-        <Text style={styles.title}>Top 5 Mejores Tiempos</Text>
+        <Text style={styles.title}>Los 5 Mejores Tiempos</Text>
 
         <View style={styles.tabContainer}>{difficulties.map(renderTab)}</View>
 
